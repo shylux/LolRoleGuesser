@@ -120,6 +120,12 @@
           }
         }
       }
-    }},
-  "defaultProject": "LolRoleGuesser"
+    }
+  },
+  "defaultProject": "LolRoleGuesser",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

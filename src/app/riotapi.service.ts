@@ -1,0 +1,141 @@
+import {Injectable} from '@angular/core';
+import * as $ from 'jquery';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RiotAPIService {
+
+  private gameVersion: string;
+  private champions = {};
+
+  private apiKey = 'RGAPI-efd05c39-816c-4d7e-8504-991b022f779b';
+  private domain = ''; // private domain = 'https://euw1.api.riotgames.com';
+
+  private ajaxDefaultSettings = {
+    dataType: 'json',
+    data: {
+      api_key: this.apiKey
+    }
+  };
+
+  constructor() {
+    this.getRandomGame();
+  }
+
+  async initialize() {
+    if (!this.gameVersion) {
+      this.gameVersion = await this.loadGameVersion();
+      this.champions = await this.loadChampions();
+    }
+  }
+
+  getHero(name: string): string {
+    return name;
+  }
+
+  getHeroIcon(name: string): string {
+    return 'image.jpg';
+  }
+
+  async getRandomGame() {
+    await this.initialize();
+    console.log(this.gameVersion);
+    const encryptedSummonerId = await this.getRandomSummonerInSelectedLeague();
+    const accountId = await this.getAccoundIdFromSummonerId(encryptedSummonerId);
+    const matchId = await this.getRandomMatchOfAccountId(accountId);
+    const match = await this.getMatch(matchId);
+    debugger;
+  }
+
+  async getRandomSummonerInSelectedLeague(): Promise<string> {
+    const division = 'II';
+    const tier = 'SILVER';
+    const queue = 'RANKED_SOLO_5x5';
+
+    const url = `${this.domain}/lol/league/v4/entries/${queue}/${tier}/${division}`;
+
+    const summoners = await $.ajax({
+      ...this.ajaxDefaultSettings,
+      url
+    });
+
+    return summoners[Math.floor(Math.random() * summoners.length)].summonerId;
+  }
+
+  async getAccoundIdFromSummonerId(encryptedSummonerId: string): Promise<string> {
+    const url = `${this.domain}/lol/summoner/v4/summoners/${encryptedSummonerId}`;
+    const account = await $.ajax({
+      ...this.ajaxDefaultSettings,
+      url
+    });
+    return account.accountId;
+  }
+
+  async getRandomMatchOfAccountId(encryptedAccountId: string): Promise<string> {
+    const queue = 420; // ranked 5v5
+    const url = `${this.domain}/lol/match/v4/matchlists/by-account/${encryptedAccountId}`;
+    const matchesResult = await $.ajax({
+      ...this.ajaxDefaultSettings,
+      url
+    });
+    let matches = matchesResult.matches.filter((match) => match.queue === queue); // filter matches to only contain ranked games
+    matches = matches.slice(0, 5); // trim to get some newer games
+    if (matches.length === 0) { throw new Error('No recent ranked matches found for this account'); }
+    return matches[Math.floor(Math.random() * matches.length)].gameId;
+  }
+
+  async getMatch(matchId: string): Promise<IMatch> {
+    const url = `${this.domain}/lol/match/v4/matches/${matchId}`;
+    const match = await $.ajax({
+      ...this.ajaxDefaultSettings,
+      url
+    });
+    return match as IMatch;
+  }
+
+  /* Setup and general data stuff */
+
+  async loadGameVersion(): Promise<string> {
+    const versions = await $.getJSON('https://ddragon.leagueoflegends.com/api/versions.json');
+    return versions[0];
+  }
+
+  async loadChampions(): Promise<object> {
+    const champion = await $.getJSON(`http://ddragon.leagueoflegends.com/cdn/${this.gameVersion}/data/en_US/champion.json`);
+    const champions = {};
+    for (const champ of Object.values<any>(champion.data)) {
+      champions[champ.key] = champ;
+    }
+    return champions;
+  }
+}
+
+
+interface IMatch {
+  gameId: number;
+  gameDuration: number;
+  participants: Array<IParticipant>;
+}
+
+interface IParticipant {
+  participantId: number;
+  teamId: number;
+  championId: number;
+  spell1Id: number;
+  spell2Id: number;
+  timeline: ITimeline;
+  stats: IStats;
+}
+
+interface ITimeline {
+  role: string;
+  lane: string;
+}
+
+interface IStats {
+  win: boolean;
+  kills: number;
+  deaths: number;
+  assists: number;
+}
