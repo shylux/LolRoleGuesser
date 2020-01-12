@@ -2,18 +2,22 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { HeroComponent } from './hero/hero.component';
+import { ChampionComponent } from './champion/champion.component';
 import { MatchComponent } from './match/match.component';
+import { PositionComponent } from './position/position.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeroComponent,
-    MatchComponent
+    ChampionComponent,
+    MatchComponent,
+    PositionComponent
   ],
-  imports: [
-    BrowserModule
-  ],
+    imports: [
+        BrowserModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

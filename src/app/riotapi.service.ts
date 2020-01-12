@@ -9,7 +9,7 @@ export class RiotAPIService {
   private gameVersion: string;
   private champions = {};
 
-  private apiKey = 'RGAPI-efd05c39-816c-4d7e-8504-991b022f779b';
+  private apiKey = 'RGAPI-c8484ac7-136c-4898-8641-c0e8ec09f965';
   private domain = ''; // private domain = 'https://euw1.api.riotgames.com';
 
   private ajaxDefaultSettings = {
@@ -20,7 +20,6 @@ export class RiotAPIService {
   };
 
   constructor() {
-    this.getRandomGame();
   }
 
   async initialize() {
@@ -30,22 +29,23 @@ export class RiotAPIService {
     }
   }
 
-  getHero(name: string): string {
-    return name;
+  async getChampion(championId: number): Promise<IChampion> {
+    await this.initialize();
+    return this.champions[championId];
   }
 
   getHeroIcon(name: string): string {
     return 'image.jpg';
   }
 
-  async getRandomGame() {
+  async getRandomGame(tier: string = 'GOLD', division: string = 'I'): Promise<IMatch> {
     await this.initialize();
     console.log(this.gameVersion);
     const encryptedSummonerId = await this.getRandomSummonerInSelectedLeague();
     const accountId = await this.getAccoundIdFromSummonerId(encryptedSummonerId);
     const matchId = await this.getRandomMatchOfAccountId(accountId);
     const match = await this.getMatch(matchId);
-    debugger;
+    return match as IMatch;
   }
 
   async getRandomSummonerInSelectedLeague(): Promise<string> {
@@ -105,20 +105,20 @@ export class RiotAPIService {
     const champion = await $.getJSON(`http://ddragon.leagueoflegends.com/cdn/${this.gameVersion}/data/en_US/champion.json`);
     const champions = {};
     for (const champ of Object.values<any>(champion.data)) {
-      champions[champ.key] = champ;
+      champions[+champ.key] = champ;
     }
     return champions;
   }
 }
 
 
-interface IMatch {
+export interface IMatch {
   gameId: number;
   gameDuration: number;
   participants: Array<IParticipant>;
 }
 
-interface IParticipant {
+export interface IParticipant {
   participantId: number;
   teamId: number;
   championId: number;
@@ -128,14 +128,32 @@ interface IParticipant {
   stats: IStats;
 }
 
-interface ITimeline {
+export interface ITimeline {
   role: string;
   lane: string;
 }
 
-interface IStats {
+export interface IStats {
   win: boolean;
   kills: number;
   deaths: number;
   assists: number;
 }
+
+export interface IChampion {
+  id: string;
+  key: string;
+  name: string;
+}
+
+export enum Positions {
+  TOP,
+  JUNGLE,
+  MID,
+  BOT,
+  SUPPORT
+}
+export const POSITION_NAMES = ['Top', 'Jungle', 'Mid', 'Bot', 'Support'];
+
+export const TIERS = ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
+export const DIVISIONS = ['IV', 'III', 'II', 'I'];
