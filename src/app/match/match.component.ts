@@ -17,7 +17,7 @@ export class MatchComponent implements OnInit {
   protected DIVISIONS = DIVISIONS;
 
   selectedTier = 'Gold';
-  selectedDivision = 'IV';
+  selectedDivision = 'III';
 
   protected match: IMatch;
   protected teamA: IParticipant[] = [];
@@ -29,11 +29,7 @@ export class MatchComponent implements OnInit {
   protected dragCurrentHover;
 
   ngOnInit() {
-    this.apiService.getRandomGame().then((match) => {
-      console.log('match loaded');
-      this.displayMatch(match);
-      this.registerDragNDrop();
-    });
+    this.searchMatch();
   }
 
   searchMatch() {
@@ -52,6 +48,7 @@ export class MatchComponent implements OnInit {
         this.positionsB.push(this.getPosition(participant.timeline));
       }
     }
+    this.teamA.sort((a, b) => {return this.roleSorter(a.timeline, b.timeline)});
     this.positionsB.sort();
   }
 
@@ -105,11 +102,6 @@ export class MatchComponent implements OnInit {
     throw Error('Invalid participant number: ' + id);
   }
 
-  registerDragNDrop() {
-    // $(this.elementRef.nativeElement).on('dragstart', '.teamB', this.dragStart.bind(this));
-    // $(this.elementRef.nativeElement).on('dragover', '.teamB', this.dragOver.bind(this));
-    // $(this.elementRef.nativeElement).on('dragend', '.teamB', this.dragEnd.bind(this));
-  }
   dragStart(e: DragEvent) {
     this.dragEl = e.target;
     e.dataTransfer.effectAllowed = 'move';

@@ -12,10 +12,14 @@ export class ChampionComponent implements OnInit {
   participant: IParticipant;
 
   champion: IChampion;
+  iconUrl: string;
 
   constructor(private apiService: RiotAPIService) { }
 
   ngOnInit() {
-    this.apiService.getChampion(this.participant.championId).then((champ) => this.champion = champ);
+    this.apiService.getChampion(this.participant.championId).then((champ) => {
+      this.champion = champ;
+      this.iconUrl = this.apiService.getChampionIconUrl(champ);
+    });
   }
 }

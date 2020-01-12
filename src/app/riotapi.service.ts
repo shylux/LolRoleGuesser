@@ -34,6 +34,10 @@ export class RiotAPIService {
     return this.champions[championId];
   }
 
+  getChampionIconUrl(champion: IChampion) {
+    return `http://ddragon.leagueoflegends.com/cdn/${this.gameVersion}/img/champion/${champion.id}.png`;
+  }
+
   getHeroIcon(name: string): string {
     return 'image.jpg';
   }
