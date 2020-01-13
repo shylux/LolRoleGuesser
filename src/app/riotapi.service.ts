@@ -9,7 +9,7 @@ export class RiotAPIService {
   private gameVersion: string;
   private champions = {};
 
-  private apiKey = 'RGAPI-c8484ac7-136c-4898-8641-c0e8ec09f965';
+  private apiKey = 'RGAPI-6f0f0771-2c90-4c4e-9de2-b0796ee609ec';
   private domain = ''; // private domain = 'https://euw1.api.riotgames.com';
 
   private ajaxDefaultSettings = {

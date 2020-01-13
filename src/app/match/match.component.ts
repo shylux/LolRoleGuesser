@@ -109,8 +109,11 @@ export class MatchComponent implements OnInit {
   dragOver(e: DragEvent) {
     e.preventDefault();
     if (!this.dragEl) { return; }
-    if (this.dragEl === e.target) { return; }
     $('.drag-over', this.elementRef.nativeElement).removeClass('drag-over');
+    if (this.dragEl === e.target) {
+      delete this.dragCurrentHover;
+      return;
+    }
     this.dragCurrentHover = $(e.target).closest('.teamB').addClass('drag-over').get(0);
   }
   dragEnd(e: DragEvent) {
@@ -122,10 +125,6 @@ export class MatchComponent implements OnInit {
       const nextNode = this.dragEl.nextSibling === this.dragCurrentHover ? this.dragEl : this.dragEl.nextSibling;
       parent.insertBefore(this.dragEl, this.dragCurrentHover);
       parent.insertBefore(this.dragCurrentHover, nextNode);
-      // const targetCopy = this.dragCurrentHover.clone(true, true);
-      // const sourceCopy = $(this.dragEl).clone(true, true);
-      // $(this.dragCurrentHover).replaceWith(sourceCopy);
-      // $(this.dragEl).replaceWith(targetCopy);
       this.dragEl = undefined;
     }
   }

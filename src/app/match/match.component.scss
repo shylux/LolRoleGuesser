@@ -1,19 +1,41 @@
+@import "variables";
+
 #match {
   display: grid;
   grid-template-columns: [teamA] 30% [rolesB] 40% [teamB] 30%;
-  grid-template-rows: 100px 100px 100px 100px 100px;
+  grid-template-rows: $grid-height $grid-height $grid-height $grid-height $grid-height;
   grid-auto-flow: column;
-  grid-gap: 10px;
+  grid-row-gap: 15px;
+
 
   .teamA {
     grid-column: teamA;
   }
   .rolesB {
     grid-column: rolesB;
+
+  }
+  &:nth-child(1 of .teamB) {
+    background-color: #8b120c;
   }
   .teamB {
     grid-column: teamB;
     cursor: move;
+    position: relative;
+
+    &:after {
+      content: " ";
+      position: absolute;
+      top: 100%;
+      right: 0;
+      height: 15px;
+      width: 449px;
+      background-image: url("/assets/images/separator.png");
+    }
+    &:last-child:after{
+      content: none;
+    }
+
   }
   .ghost {
     border: 1px dashed;

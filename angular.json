@@ -26,6 +26,11 @@
             "styles": [
               "src/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/"
+              ]
+            },
             "scripts": ["./node_modules/jquery/dist/jquery.min.js"]
           },
           "configurations": {
@@ -91,6 +96,11 @@
             "styles": [
               "src/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/"
+              ]
+            },
             "scripts": []
           }
         },

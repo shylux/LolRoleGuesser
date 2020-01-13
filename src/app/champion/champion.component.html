@@ -1,5 +1,7 @@
-<div *ngIf="champion">
-  <span>{{ champion.name }}</span>
-  <img [src]="iconUrl" draggable="false" />
-</div>
+<ng-container *ngIf="champion">
+  <span class="name">{{champion.name}}</span>
+  <div class="crop">
+    <img [src]="iconUrl" draggable="false" />
+  </div>
+</ng-container>
 <div *ngIf="!champion">loading...</div>
