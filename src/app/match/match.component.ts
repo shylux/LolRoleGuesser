@@ -13,16 +13,16 @@ export class MatchComponent implements OnInit {
 
   private static LANE_ORDER = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM'];
   private static ROLE_ORDER = ['SOLO', 'DUO_CARRY', 'DUO', 'NONE', 'DUO_SUPPORT'];
-  protected TIERS = TIERS;
-  protected DIVISIONS = DIVISIONS;
+  public TIERS = TIERS;
+  public DIVISIONS = DIVISIONS;
 
   selectedTier = 'Gold';
   selectedDivision = 'I';
 
   protected match: IMatch;
-  protected teamA: IParticipant[] = [];
-  protected teamB: IParticipant[] = [];
-  protected positionsB: Positions[] = [];
+  public teamA: IParticipant[] = [];
+  public teamB: IParticipant[] = [];
+  public positionsB: Positions[] = [];
 
   // drag n drop
   protected dragEl;

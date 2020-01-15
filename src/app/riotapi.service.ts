@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as $ from 'jquery';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class RiotAPIService {
   private champions = {};
 
   private apiKey: string; // = 'RGAPI-4ced3570-9426-43f5-9a2e-be58faa7f88c';
-  private domain = ''; // private domain = 'https://euw1.api.riotgames.com';
+  private domain: string = environment.riotApiDomain;
 
   private ajaxDefaultSettings = {
     dataType: 'json',

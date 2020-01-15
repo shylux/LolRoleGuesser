@@ -16,7 +16,7 @@ export class PositionComponent implements OnInit {
   @Input()
   protected position: Positions;
 
-  protected name: string;
+  public name: string;
 
   ngOnInit() {
     this.name = POSITION_NAMES[this.position];
