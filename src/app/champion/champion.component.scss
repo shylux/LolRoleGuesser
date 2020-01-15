@@ -8,7 +8,6 @@
 
   .name {
     font-size: 1.5rem;
-    margin-right: 1rem;
   }
 
   .crop {
@@ -16,14 +15,21 @@
     width: $grid-height * .6;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid #8b120c;
+    border: 3px solid $color-team-red;
     box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.75), inset 2px 1px 3px 0 rgba(0, 0, 0, 0.75);
-    margin-right: 1rem;
+    margin: 0 1rem 0 1rem;
 
     img {
       height: $grid-height * 0.8;
       margin-top: -$grid-height * .1;
       margin-left: -$grid-height * .1;
+    }
+  }
+
+  &.teamA {
+    flex-direction: row-reverse;
+    .crop {
+      border-color: $color-team-blue;
     }
   }
 }

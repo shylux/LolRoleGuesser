@@ -9,13 +9,13 @@ export class RiotAPIService {
   private gameVersion: string;
   private champions = {};
 
-  private apiKey = 'RGAPI-6f0f0771-2c90-4c4e-9de2-b0796ee609ec';
+  private apiKey: string; // = 'RGAPI-4ced3570-9426-43f5-9a2e-be58faa7f88c';
   private domain = ''; // private domain = 'https://euw1.api.riotgames.com';
 
   private ajaxDefaultSettings = {
     dataType: 'json',
     data: {
-      api_key: this.apiKey
+      api_key: null
     }
   };
 
@@ -24,6 +24,8 @@ export class RiotAPIService {
 
   async initialize() {
     if (!this.gameVersion) {
+      this.apiKey = await this.loadApiKey();
+      this.ajaxDefaultSettings.data.api_key = this.apiKey;
       this.gameVersion = await this.loadGameVersion();
       this.champions = await this.loadChampions();
     }
@@ -38,25 +40,17 @@ export class RiotAPIService {
     return `http://ddragon.leagueoflegends.com/cdn/${this.gameVersion}/img/champion/${champion.id}.png`;
   }
 
-  getHeroIcon(name: string): string {
-    return 'image.jpg';
-  }
-
-  async getRandomGame(tier: string = 'GOLD', division: string = 'I'): Promise<IMatch> {
+  async getRandomGame(tier: string, division: string): Promise<IMatch> {
     await this.initialize();
     console.log(this.gameVersion);
-    const encryptedSummonerId = await this.getRandomSummonerInSelectedLeague();
+    const encryptedSummonerId = await this.getRandomSummonerInSelectedLeague(tier, division);
     const accountId = await this.getAccoundIdFromSummonerId(encryptedSummonerId);
     const matchId = await this.getRandomMatchOfAccountId(accountId);
     const match = await this.getMatch(matchId);
     return match as IMatch;
   }
 
-  async getRandomSummonerInSelectedLeague(): Promise<string> {
-    const division = 'II';
-    const tier = 'SILVER';
-    const queue = 'RANKED_SOLO_5x5';
-
+  async getRandomSummonerInSelectedLeague(tier: string, division: string, queue = 'RANKED_SOLO_5x5'): Promise<string> {
     const url = `${this.domain}/lol/league/v4/entries/${queue}/${tier}/${division}`;
 
     const summoners = await $.ajax({
@@ -99,6 +93,10 @@ export class RiotAPIService {
   }
 
   /* Setup and general data stuff */
+  async loadApiKey(): Promise<string> {
+    const key = await $.get('/assets/key.txt');
+    return key.trim();
+  }
 
   async loadGameVersion(): Promise<string> {
     const versions = await $.getJSON('https://ddragon.leagueoflegends.com/api/versions.json');

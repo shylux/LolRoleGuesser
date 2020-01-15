@@ -1,4 +1,4 @@
-<div id="game-selector">
+<div class="game-selector">
   <select class="tier" [(ngModel)]="selectedTier">
     <option *ngFor="let tier of TIERS" value="{{tier}}">{{tier}}</option>
   </select>
@@ -7,7 +7,7 @@
   </select>
   <button (click)="searchMatch()">Search Match</button>
 </div>
-<div id="match">
+<div class="match">
   <app-champion *ngFor="let participant of teamA" [participant]="participant" class="teamA"></app-champion>
   <app-position *ngFor="let pos of positionsB" [position]="pos" [tier]="selectedTier" class="rolesB"></app-position>
   <app-champion *ngFor="let participant of teamB"
@@ -19,4 +19,4 @@
                 (dragover)="dragOver($event)"
                 (dragend)="dragEnd($event)"></app-champion>
 </div>
-<button (click)="lockIn()">Lock In</button>
+<div class="submit" (click)="lockIn()"><img alt="Accept" src="/assets/images/accept.png"/></div>

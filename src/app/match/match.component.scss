@@ -1,27 +1,28 @@
 @import "variables";
 
-#match {
+.game-selector {
+  display: none;
+}
+
+.match {
   display: grid;
-  grid-template-columns: [teamA] 30% [rolesB] 40% [teamB] 30%;
-  grid-template-rows: $grid-height $grid-height $grid-height $grid-height $grid-height;
+  grid-template-columns: [teamA] 3fr [rolesB] 4fr [teamB] 3fr;
+  grid-template-rows: repeat(5, $grid-height);
   grid-auto-flow: column;
   grid-row-gap: 15px;
-
 
   .teamA {
     grid-column: teamA;
   }
   .rolesB {
     grid-column: rolesB;
+  }
 
-  }
-  &:nth-child(1 of .teamB) {
-    background-color: #8b120c;
-  }
   .teamB {
     grid-column: teamB;
-    cursor: move;
+    cursor: ns-resize;
     position: relative;
+    border-right: 12px solid transparent;
 
     &:after {
       content: " ";
@@ -42,21 +43,40 @@
   }
 
   .drag-over {
-    background-color: red;
+    border-right: 12px solid $color-gold;
   }
   .idiot {
-    background-color: purple;
+    border-right: 12px solid $color-team-red;
   }
-
-  > * {
-    place-self: center;
-    width: 100%;
-    height: 100%;
+  .correct {
+    border-right: 12px solid $color-success;
   }
+}
 
-  @for $i from 0 through 4 {
-    .row-#{$i} {
-      grid-row: #{$i+1};
+.submit {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  overflow: auto;
+  cursor: pointer;
+
+  img {
+    float: right;
+    margin: 1rem 3rem;
+  }
+}
+
+@media (max-width: 1280px) {
+  .match {
+    grid-template-columns: [rolesB] 1fr [teamB] 3fr;
+
+    .teamA {
+      display: none;
     }
+  }
+  .submit img {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
   }
 }

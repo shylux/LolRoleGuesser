@@ -17,7 +17,7 @@ export class MatchComponent implements OnInit {
   protected DIVISIONS = DIVISIONS;
 
   selectedTier = 'Gold';
-  selectedDivision = 'III';
+  selectedDivision = 'I';
 
   protected match: IMatch;
   protected teamA: IParticipant[] = [];
@@ -53,7 +53,7 @@ export class MatchComponent implements OnInit {
   }
 
   lockIn() {
-    const championElements = $('.teamB', this.elementRef.nativeElement).toArray();
+    const championElements = $('.teamB', this.elementRef.nativeElement).removeClass('idiot correct').toArray();
     const ids = championElements.map((e) => $(e).data('participant-id'));
     const positions: Positions[] = ids.map((id) => {
       return this.getPosition(this.getParticipant(id).timeline);
@@ -64,11 +64,10 @@ export class MatchComponent implements OnInit {
       if (pos !== this.positionsB[index]) {
         success = false;
         $(championElements[index]).addClass('idiot');
+      } else {
+        $(championElements[index]).addClass('correct');
       }
     });
-    if (success) {
-      alert('Correct!');
-    }
   }
 
   getPosition(timeline: ITimeline): Positions {
