@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IChampion, IParticipant, RiotAPIService} from '../riotapi.service';
+import {RiotAPIService} from '../riotapi.service';
+import {IChampion, IParticipant} from '../riotapi.types';
 
 @Component({
   selector: 'app-champion',

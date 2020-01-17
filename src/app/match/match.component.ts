@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
-import {DIVISIONS, IMatch, IParticipant, ITimeline, Positions, RiotAPIService, TIERS} from '../riotapi.service';
+import {RiotAPIService,} from '../riotapi.service';
 import * as $ from 'jquery';
+import {TIERS, DIVISIONS, IMatch, IParticipant, Positions, ITimeline} from '../riotapi.types';
 
 @Component({
   selector: 'app-match',

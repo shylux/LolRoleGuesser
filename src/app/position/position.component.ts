@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {POSITION_NAMES, Positions} from '../riotapi.service';
+import {POSITION_NAMES, Positions} from '../riotapi.types';
 
 @Component({
   selector: 'app-position',
