@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const riotapi_types_1 = require("../src/app/riotapi.types");
 const axios = require('axios').default;
 class RiotAPI {
     constructor(apiKey, domain) {
@@ -32,8 +33,8 @@ class RiotAPI {
             yield this.initialize();
             const encryptedSummonerId = yield this.getRandomSummonerInSelectedLeague(tier, division);
             const accountId = yield this.getAccoundIdFromSummonerId(encryptedSummonerId);
-            const matchId = yield this.getRandomMatchOfAccountId(accountId);
-            const match = yield this.getMatch(matchId);
+            const matchRefs = yield this.getMatchesOfAccountId(accountId);
+            const match = yield this.getRandomValidMatchOfAccountId(matchRefs);
             return match;
         });
     }
@@ -51,17 +52,43 @@ class RiotAPI {
             return account.accountId;
         });
     }
-    getRandomMatchOfAccountId(encryptedAccountId) {
+    getMatchesOfAccountId(encryptedAccountId) {
         return __awaiter(this, void 0, void 0, function* () {
             const queue = 420; // ranked 5v5
-            const url = `${this.domain}/lol/match/v4/matchlists/by-account/${encryptedAccountId}`;
-            const matchesResult = (yield axios.get(url, this.defaultParams)).data;
-            let matches = matchesResult.matches.filter((match) => match.queue === queue); // filter matches to only contain ranked games
-            matches = matches.slice(0, 5); // trim to get some newer games
-            if (matches.length === 0) {
-                throw new Error('No recent ranked matches found for this account');
+            const url = `${this.domain}/lol/match/v4/matchlists/by-account/${encryptedAccountId}?queue=${queue}`;
+            const matchRefs = (yield axios.get(url, this.defaultParams)).data.matches;
+            if (matchRefs.length === 0) {
+                throw new RetryError('No recent ranked matches found for this account');
             }
-            return matches[Math.floor(Math.random() * matches.length)].gameId;
+            return matchRefs;
+        });
+    }
+    getRandomValidMatchOfAccountId(matchRefs) {
+        return __awaiter(this, void 0, void 0, function* () {
+            shuffleArray(matchRefs);
+            matchRefs = matchRefs.slice(0, 10); // trim to get some newer games
+            for (const matchRef of matchRefs) {
+                const url = `${this.domain}/lol/match/v4/matches/${matchRef.gameId}`;
+                // const url = `${this.domain}/lol/match/v4/matches/4336510853`;
+                const match = (yield axios.get(url, this.defaultParams)).data;
+                const positions = [];
+                let hasDuplicate = false;
+                for (const participant of match.participants) {
+                    if (participant.teamId === 200) {
+                        const pos = riotapi_types_1.getPosition(participant.timeline);
+                        if (positions.includes(pos)) {
+                            hasDuplicate = true;
+                            break;
+                        }
+                        positions.push(pos);
+                    }
+                }
+                if (hasDuplicate) {
+                    continue;
+                }
+                return match;
+            }
+            throw new RetryError('No valid match found.');
         });
     }
     getMatch(matchId) {
@@ -79,3 +106,15 @@ class RiotAPI {
     }
 }
 exports.RiotAPI = RiotAPI;
+/**
+ * Randomize array element order in-place.
+ * Using Durstenfeld shuffle algorithm.
+ */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+class RetryError extends Error {
+}

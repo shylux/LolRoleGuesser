@@ -4,6 +4,11 @@ export interface IMatch {
   participants: Array<IParticipant>;
 }
 
+export interface IMatchReference {
+  gameId: number;
+  queue: number;
+}
+
 export interface IParticipant {
   participantId: number;
   teamId: number;
@@ -41,5 +46,23 @@ export enum Positions {
 }
 export const POSITION_NAMES = ['Top', 'Jungle', 'Mid', 'Bot', 'Support'];
 
-export const TIERS = ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
+export const TIERS = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND'];
 export const DIVISIONS = ['IV', 'III', 'II', 'I'];
+
+export function getPosition(timeline: ITimeline): Positions {
+  switch (timeline.lane) {
+    case 'TOP':
+      return Positions.TOP;
+    case 'JUNGLE':
+      return Positions.JUNGLE;
+    case 'MIDDLE':
+      return Positions.MID;
+    case 'BOTTOM':
+    default:
+      if (timeline.role === 'DUO_SUPPORT') {
+        return Positions.SUPPORT;
+      } else {
+        return Positions.BOT;
+      }
+  }
+}

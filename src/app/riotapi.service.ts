@@ -10,6 +10,7 @@ export class RiotAPIService {
 
   private gameVersion: string;
   private champions = {};
+  private readonly domain: string = '';
 
   private ajaxDefaultSettings = {
     dataType: 'json',

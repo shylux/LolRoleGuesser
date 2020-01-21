@@ -3,6 +3,7 @@ import express = require('express');
 import cors = require('cors');
 import helmet = require('helmet');
 import {RiotAPI} from './riotapi';
+import {DIVISIONS, TIERS} from '../src/app/riotapi.types';
 
 dotenv.config();
 
@@ -18,10 +19,17 @@ app.use(cors());
 app.use(express.static('.'));
 
 app.get('/match', (req, res) => {
-  api.getRandomGame('GOLD', 'I').then((match) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(match);
-  });
+  const tier = TIERS.indexOf(req.query.tier) > -1 ? req.query.tier : 'GOLD';
+  const division = DIVISIONS.indexOf(req.query.division) > -1 ? req.query.division : 'I';
+
+  res.setHeader('Content-Type', 'application/json');
+  api.getRandomGame(tier, division)
+    .then((match) => {
+      res.send(match);
+    })
+    .catch((reason) => {
+      res.send({error: reason.constructor.name, message: reason.toString()});
+    });
 });
 
 const server = app.listen(PORT, () => {

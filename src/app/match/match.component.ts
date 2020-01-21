@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
-import {RiotAPIService,} from '../riotapi.service';
+import {RiotAPIService, } from '../riotapi.service';
 import * as $ from 'jquery';
-import {TIERS, DIVISIONS, IMatch, IParticipant, Positions, ITimeline} from '../riotapi.types';
+import {TIERS, DIVISIONS, IMatch, IParticipant, Positions, ITimeline, getPosition} from '../riotapi.types';
 
 @Component({
   selector: 'app-match',
@@ -46,10 +46,10 @@ export class MatchComponent implements OnInit {
       if (participant.teamId === 100) { this.teamA.push(participant); }
       if (participant.teamId === 200) {
         this.teamB.push(participant);
-        this.positionsB.push(this.getPosition(participant.timeline));
+        this.positionsB.push(getPosition(participant.timeline));
       }
     }
-    this.teamA.sort((a, b) => {return this.roleSorter(a.timeline, b.timeline)});
+    this.teamA.sort((a, b) => this.roleSorter(a.timeline, b.timeline));
     this.positionsB.sort();
   }
 
@@ -57,7 +57,7 @@ export class MatchComponent implements OnInit {
     const championElements = $('.teamB', this.elementRef.nativeElement).removeClass('idiot correct').toArray();
     const ids = championElements.map((e) => $(e).data('participant-id'));
     const positions: Positions[] = ids.map((id) => {
-      return this.getPosition(this.getParticipant(id).timeline);
+      return getPosition(this.getParticipant(id).timeline);
     });
 
     let success = true;
@@ -69,24 +69,6 @@ export class MatchComponent implements OnInit {
         $(championElements[index]).addClass('correct');
       }
     });
-  }
-
-  getPosition(timeline: ITimeline): Positions {
-    switch (timeline.lane) {
-      case 'TOP':
-        return Positions.TOP;
-      case 'JUNGLE':
-        return Positions.JUNGLE;
-      case 'MIDDLE':
-        return Positions.MID;
-      case 'BOTTOM':
-      default:
-        if (timeline.role === 'DUO_SUPPORT') {
-          return Positions.SUPPORT;
-        } else {
-          return Positions.BOT;
-        }
-    }
   }
 
   roleSorter(a: ITimeline, b: ITimeline) {

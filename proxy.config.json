@@ -1,8 +1,7 @@
 {
-  "/lol" : {
-    "target" : "https://euw1.api.riotgames.com",
+  "/match" : {
+    "target" : "http://127.0.0.1:8888",
     "secure" : false,
-    "logLevel" : "debug",
-    "changeOrigin": true
+    "logLevel" : "debug"
   }
 }
