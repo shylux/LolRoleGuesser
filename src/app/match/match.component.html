@@ -20,5 +20,5 @@
                 (dragover)="dragOver($event)"
                 (dragend)="dragEnd($event)"></app-champion>
 </div>
-<img *ngIf="match && !complete" class="submit" (click)="lockIn()" alt="Accept" src="/assets/images/accept.png"/>
+<img *ngIf="match && !complete" id="accept" class="submit" (click)="lockIn()" alt="Accept" src=""/>
 <img *ngIf="match && complete" id="play-again" class="submit" (click)="searchMatch()" alt="Play again" src="" />

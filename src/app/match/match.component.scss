@@ -74,9 +74,15 @@
   cursor: pointer;
   margin: 0 auto;
 
+  &#accept {
+    content: url("/assets/images/accept.png");
+    &:hover {
+      content: url("/assets/images/accept-hover.png");
+    }
+  }
+
   &#play-again {
     content: url("/assets/images/play-again.png");
-
     &:hover {
       content: url("/assets/images/play-again-hover.png");
     }
