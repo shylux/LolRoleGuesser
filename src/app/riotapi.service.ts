@@ -32,7 +32,7 @@ export class RiotAPIService {
   }
 
   getChampionIconUrl(champion: IChampion) {
-    return `http://ddragon.leagueoflegends.com/cdn/${this.gameVersion}/img/champion/${champion.id}.png`;
+    return `https://ddragon.leagueoflegends.com/cdn/${this.gameVersion}/img/champion/${champion.id}.png`;
   }
 
   async getRandomGame(tier: string, division: string): Promise<IMatch> {
