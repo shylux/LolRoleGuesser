@@ -8,6 +8,7 @@
   <button (click)="searchMatch()">Search Match</button>
 </div>
 <div class="match">
+  <img *ngIf="!match" class="spinner" src="/assets/images/loading-circle.png" />
   <app-champion *ngFor="let participant of teamA" [participant]="participant" class="teamA"></app-champion>
   <app-position *ngFor="let pos of positionsB" [position]="pos" [tier]="selectedTier" class="rolesB"></app-position>
   <app-champion *ngFor="let participant of teamB"
@@ -19,4 +20,5 @@
                 (dragover)="dragOver($event)"
                 (dragend)="dragEnd($event)"></app-champion>
 </div>
-<div class="submit" (click)="lockIn()"><img alt="Accept" src="/assets/images/accept.png"/></div>
+<img *ngIf="match && !complete" class="submit" (click)="lockIn()" alt="Accept" src="/assets/images/accept.png"/>
+<img *ngIf="match && complete" id="play-again" class="submit" (click)="searchMatch()" alt="Play again" src="" />

@@ -2,6 +2,7 @@ import {Component, ElementRef, OnInit} from '@angular/core';
 import {RiotAPIService, } from '../riotapi.service';
 import * as $ from 'jquery';
 import {TIERS, DIVISIONS, IMatch, IParticipant, Positions, ITimeline, getPosition} from '../riotapi.types';
+import {StatsService} from '../stats.service';
 
 @Component({
   selector: 'app-match',
@@ -10,7 +11,7 @@ import {TIERS, DIVISIONS, IMatch, IParticipant, Positions, ITimeline, getPositio
 })
 export class MatchComponent implements OnInit {
 
-  constructor(private elementRef: ElementRef, private apiService: RiotAPIService) { }
+  constructor(private elementRef: ElementRef, private apiService: RiotAPIService, private statsService: StatsService) { }
 
   private static LANE_ORDER = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM'];
   private static ROLE_ORDER = ['SOLO', 'DUO_CARRY', 'DUO', 'NONE', 'DUO_SUPPORT'];
@@ -20,7 +21,13 @@ export class MatchComponent implements OnInit {
   selectedTier = 'Gold';
   selectedDivision = 'I';
 
+  protected wins = 0;
+  protected losses = 0;
+
   protected match: IMatch;
+  protected lockedIn = false;
+  protected result: boolean;
+  protected complete = false;
   public teamA: IParticipant[] = [];
   public teamB: IParticipant[] = [];
   public positionsB: Positions[] = [];
@@ -34,11 +41,18 @@ export class MatchComponent implements OnInit {
   }
 
   searchMatch() {
+    delete this.match;
+    delete this.teamA;
+    delete this.positionsB;
+    delete this.teamB;
+    delete this.result;
     this.apiService.getRandomGame(this.selectedTier.toUpperCase(), this.selectedDivision).then(this.displayMatch.bind(this));
   }
 
   displayMatch(match: IMatch) {
     this.match = match;
+    this.lockedIn = false;
+    this.complete = false;
     this.teamA = [];
     this.teamB = [];
     this.positionsB = [];
@@ -69,6 +83,17 @@ export class MatchComponent implements OnInit {
         $(championElements[index]).addClass('correct');
       }
     });
+    if (!this.lockedIn) {
+      if (success) {
+        this.result = true;
+        this.statsService.wins++;
+      } else {
+        this.result = false;
+        this.statsService.losses++;
+      }
+      this.lockedIn = true;
+    }
+    if (success) { this.complete = true; }
   }
 
   roleSorter(a: ITimeline, b: ITimeline) {

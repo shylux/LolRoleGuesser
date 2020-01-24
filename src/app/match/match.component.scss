@@ -1,5 +1,11 @@
 @import "variables";
 
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .game-selector {
   display: none;
 }
@@ -36,8 +42,19 @@
     &:last-child:after{
       content: none;
     }
-
   }
+
+  .spinner {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin-top: 5rem;
+    width: 54px;
+    height: 54px;
+
+    animation: rotate 4s linear infinite;
+  }
+
   .ghost {
     border: 1px dashed;
   }
@@ -54,15 +71,15 @@
 }
 
 .submit {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  overflow: auto;
   cursor: pointer;
+  margin: 0 auto;
 
-  img {
-    float: right;
-    margin: 1rem 3rem;
+  &#play-again {
+    content: url("/assets/images/play-again.png");
+
+    &:hover {
+      content: url("/assets/images/play-again-hover.png");
+    }
   }
 }
 
@@ -79,4 +96,9 @@
     margin-left: auto;
     margin-right: auto;
   }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(359deg); }
 }

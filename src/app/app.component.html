@@ -1,4 +1,13 @@
 <div class="container">
-  <h1>{{title}}</h1>
+  <header>
+    <h1>{{title}}</h1>
+    <div *ngIf="statsService.wins === 0 && statsService.losses === 0" class="hint">
+      <span>Drag the Champions to the correct roles!</span>
+      <img src="/assets/images/arrow.png" alt="Arrow Down" />
+    </div>
+    <div *ngIf="statsService.wins > 0 || statsService.losses > 0" class="stats">
+      Wins: <span class="wins">{{statsService.wins}}</span> Losses: <span class="losses">{{statsService.losses}}</span>
+    </div>
+  </header>
   <app-match></app-match>
 </div>
