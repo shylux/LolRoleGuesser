@@ -24,10 +24,10 @@ export class MatchComponent implements OnInit {
   protected wins = 0;
   protected losses = 0;
 
-  protected match: IMatch;
+  public match: IMatch;
   protected lockedIn = false;
   protected result: boolean;
-  protected complete = false;
+  public complete = false;
   public teamA: IParticipant[] = [];
   public teamB: IParticipant[] = [];
   public positionsB: Positions[] = [];

@@ -8,7 +8,7 @@ import {StatsService} from './stats.service';
 })
 export class AppComponent {
 
-  constructor(protected statsService: StatsService) { }
+  constructor(public statsService: StatsService) { }
 
   title = 'LoL Role Guesser';
 }
