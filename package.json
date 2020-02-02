@@ -2,11 +2,13 @@
   "name": "lol-role-guesser",
   "version": "1.0.0",
   "author": {
-    "name" : "Lukas Knöpfel",
-    "email" : "shylux@gmail.com",
-    "url" : "https://shylux.ch/"
+    "name": "Lukas Knöpfel",
+    "email": "shylux@gmail.com",
+    "url": "https://shylux.ch/"
   },
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.config.json",
@@ -27,6 +29,7 @@
     "@angular/router": "~8.2.3",
     "@types/jquery": "^3.3.31",
     "jquery": "^3.4.1",
+    "ngx-cookie-service": "^2.3.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

@@ -89,10 +89,10 @@ export class MatchComponent implements OnInit {
     if (!this.lockedIn) {
       if (success) {
         this.result = true;
-        this.statsService.wins++;
+        this.statsService.addWin();
       } else {
         this.result = false;
-        this.statsService.losses++;
+        this.statsService.addLoss();
       }
       this.lockedIn = true;
     }
