@@ -1,16 +1,7 @@
-<div class="game-selector">
-  <select class="tier" [(ngModel)]="selectedTier">
-    <option *ngFor="let tier of TIERS" value="{{tier}}">{{tier}}</option>
-  </select>
-  <select class="division" [(ngModel)]="selectedDivision">
-    <option *ngFor="let division of DIVISIONS" value="{{division}}">{{division}}</option>
-  </select>
-  <button (click)="searchMatch()">Search Match</button>
-</div>
 <div class="match">
-  <img *ngIf="!match" class="spinner" src="/assets/images/loading-circle.png" />
+  <img *ngIf="!match" class="spinner" src="/assets/images/loading-circle.png" alt="Loading..." />
   <app-champion *ngFor="let participant of teamA" [participant]="participant" class="teamA"></app-champion>
-  <app-position *ngFor="let pos of positionsB" [position]="pos" [tier]="selectedTier" class="rolesB"></app-position>
+  <app-position *ngFor="let pos of positionsB" [position]="pos" class="rolesB"></app-position>
   <app-champion *ngFor="let participant of teamB"
                 [participant]="participant"
                 class="teamB"

@@ -1,13 +1,17 @@
 <div class="container">
   <header>
     <h1>{{title}}</h1>
+    <img class="emblem" (click)="toggleTierSelector()" src="/assets/images/emblems/Emblem_{{statsService.tier}}.png" alt="Tier {{statsService.tier}} Emblem" />
     <div *ngIf="statsService.wins === 0 && statsService.losses === 0" class="hint">
       <span>Drag the Champions to the correct roles!</span>
-      <img src="/assets/images/arrow.png" alt="Arrow Down" />
+      <img alt="Arrow Down" src="/assets/images/arrow.png"/>
     </div>
     <div *ngIf="statsService.wins > 0 || statsService.losses > 0" class="stats">
       Wins: <span class="wins">{{statsService.wins}}</span> Losses: <span class="losses">{{statsService.losses}}</span>
     </div>
   </header>
+  <div class="tier-selector" *ngIf="tierSelectorToggle">
+    <img class="emblem" (click)="selectTier(tier)" *ngFor="let tier of TIERS" attr.data-tier="{{tier}}" alt="Tier {{tier}}" src="/assets/images/emblems/Emblem_{{tier}}.png" />
+  </div>
   <app-match></app-match>
 </div>

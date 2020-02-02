@@ -11,14 +11,17 @@ import {StatsService} from '../stats.service';
 })
 export class MatchComponent implements OnInit {
 
-  constructor(private elementRef: ElementRef, private apiService: RiotAPIService, private statsService: StatsService) { }
+  constructor(private elementRef: ElementRef, private apiService: RiotAPIService, private statsService: StatsService) {
+    statsService.tierChange.subscribe(tier => {
+      this.searchMatch();
+    });
+  }
 
   private static LANE_ORDER = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM'];
   private static ROLE_ORDER = ['SOLO', 'DUO_CARRY', 'DUO', 'NONE', 'DUO_SUPPORT'];
   public TIERS = TIERS;
   public DIVISIONS = DIVISIONS;
 
-  selectedTier = 'Gold';
   selectedDivision = 'I';
 
   protected wins = 0;
@@ -46,7 +49,7 @@ export class MatchComponent implements OnInit {
     delete this.positionsB;
     delete this.teamB;
     delete this.result;
-    this.apiService.getRandomGame(this.selectedTier.toUpperCase(), this.selectedDivision).then(this.displayMatch.bind(this));
+    this.apiService.getRandomGame(this.statsService.tier, this.selectedDivision).then(this.displayMatch.bind(this));
   }
 
   displayMatch(match: IMatch) {

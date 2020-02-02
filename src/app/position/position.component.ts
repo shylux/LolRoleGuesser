@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {POSITION_NAMES, Positions} from '../riotapi.types';
+import {StatsService} from '../stats.service';
 
 @Component({
   selector: 'app-position',
@@ -8,10 +9,7 @@ import {POSITION_NAMES, Positions} from '../riotapi.types';
 })
 export class PositionComponent implements OnInit {
 
-  constructor() { }
-
-  @Input()
-  protected tier = 'Iron';
+  constructor(public statsService: StatsService) { }
 
   @Input()
   protected position: Positions;
@@ -23,7 +21,7 @@ export class PositionComponent implements OnInit {
   }
 
   getImgSrc() {
-    let tier = this.tier;
+    let tier = this.statsService.tier;
     if (tier === 'Platinum') { tier = 'Plat'; }
     return `assets/images/positions/Position_${tier}-${this.name}.png`;
   }

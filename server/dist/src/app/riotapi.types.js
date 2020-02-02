@@ -9,7 +9,8 @@ var Positions;
     Positions[Positions["SUPPORT"] = 4] = "SUPPORT";
 })(Positions = exports.Positions || (exports.Positions = {}));
 exports.POSITION_NAMES = ['Top', 'Jungle', 'Mid', 'Bot', 'Support'];
-exports.TIERS = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND'];
+exports.TIERS = ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
+exports.TIERS_UPPER = exports.TIERS.map(tier => tier.toUpperCase());
 exports.DIVISIONS = ['IV', 'III', 'II', 'I'];
 function getPosition(timeline) {
     switch (timeline.lane) {

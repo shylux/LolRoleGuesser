@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import * as $ from 'jquery';
-import {environment} from '../environments/environment';
 import {IChampion, IMatch} from './riotapi.types';
 
 @Injectable({
@@ -10,11 +9,6 @@ export class RiotAPIService {
 
   private gameVersion: string;
   private champions = {};
-  private readonly domain: string = '';
-
-  private ajaxDefaultSettings = {
-    dataType: 'json',
-  };
 
   constructor() {
   }
@@ -38,7 +32,7 @@ export class RiotAPIService {
   async getRandomGame(tier: string, division: string): Promise<IMatch> {
     await this.initialize();
     console.log(this.gameVersion);
-    const match = await $.getJSON('/match');
+    const match = await $.getJSON('/match', {tier});
     return match as IMatch;
   }
 

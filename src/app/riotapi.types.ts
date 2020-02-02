@@ -46,7 +46,8 @@ export enum Positions {
 }
 export const POSITION_NAMES = ['Top', 'Jungle', 'Mid', 'Bot', 'Support'];
 
-export const TIERS = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND'];
+export const TIERS = ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
+export const TIERS_UPPER = TIERS.map(tier => tier.toUpperCase());
 export const DIVISIONS = ['IV', 'III', 'II', 'I'];
 
 export function getPosition(timeline: ITimeline): Positions {

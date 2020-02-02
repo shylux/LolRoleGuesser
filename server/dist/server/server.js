@@ -15,7 +15,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.static('.'));
 app.get('/match', (req, res) => {
-    const tier = riotapi_types_1.TIERS.indexOf(req.query.tier) > -1 ? req.query.tier : 'GOLD';
+    const tier = riotapi_types_1.TIERS_UPPER.indexOf(req.query.tier.toUpperCase()) > -1 ? req.query.tier.toUpperCase() : 'GOLD';
     const division = riotapi_types_1.DIVISIONS.indexOf(req.query.division) > -1 ? req.query.division : 'I';
     res.setHeader('Content-Type', 'application/json');
     api.getRandomGame(tier, division)
