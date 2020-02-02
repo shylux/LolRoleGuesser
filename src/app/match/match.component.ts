@@ -1,8 +1,9 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
-import {RiotAPIService, } from '../riotapi.service';
+import {RiotAPIService,} from '../riotapi.service';
 import * as $ from 'jquery';
 import {TIERS, DIVISIONS, IMatch, IParticipant, Positions, ITimeline, getPosition} from '../riotapi.types';
 import {StatsService} from '../stats.service';
+import {PreloaderService} from '../preloader.service';
 
 @Component({
   selector: 'app-match',
@@ -11,7 +12,7 @@ import {StatsService} from '../stats.service';
 })
 export class MatchComponent implements OnInit {
 
-  constructor(private elementRef: ElementRef, private apiService: RiotAPIService, private statsService: StatsService) {
+  constructor(private elementRef: ElementRef, private apiService: RiotAPIService, private statsService: StatsService, private preloaderService: PreloaderService) {
     statsService.tierChange.subscribe(tier => {
       this.searchMatch();
     });
@@ -40,6 +41,10 @@ export class MatchComponent implements OnInit {
   protected dragCurrentHover;
 
   ngOnInit() {
+    this.preloaderService.loader.next({url: '/assets/images/accept.png', type: 'image'});
+    this.preloaderService.loader.next({url: '/assets/images/accept-hover.png', type: 'image'});
+    this.preloaderService.loader.next({url: '/assets/images/play-again.png', type: 'image'});
+    this.preloaderService.loader.next({url: '/assets/images/play-again-hover.png', type: 'image'});
     this.searchMatch();
   }
 
@@ -60,7 +65,9 @@ export class MatchComponent implements OnInit {
     this.teamB = [];
     this.positionsB = [];
     for (const participant of match.participants) {
-      if (participant.teamId === 100) { this.teamA.push(participant); }
+      if (participant.teamId === 100) {
+        this.teamA.push(participant);
+      }
       if (participant.teamId === 200) {
         this.teamB.push(participant);
         this.positionsB.push(getPosition(participant.timeline));
@@ -96,18 +103,24 @@ export class MatchComponent implements OnInit {
       }
       this.lockedIn = true;
     }
-    if (success) { this.complete = true; }
+    if (success) {
+      this.complete = true;
+    }
   }
 
   roleSorter(a: ITimeline, b: ITimeline) {
     const laneDiff = MatchComponent.LANE_ORDER.indexOf(a.lane) - MatchComponent.LANE_ORDER.indexOf(b.lane);
-    if (laneDiff !== 0) { return laneDiff; }
+    if (laneDiff !== 0) {
+      return laneDiff;
+    }
     return MatchComponent.ROLE_ORDER.indexOf(a.role) - MatchComponent.ROLE_ORDER.indexOf(b.role);
   }
 
   getParticipant(id: number) {
     for (const part of this.match.participants) {
-      if (part.participantId === id) { return part; }
+      if (part.participantId === id) {
+        return part;
+      }
     }
     throw Error('Invalid participant number: ' + id);
   }
@@ -116,9 +129,12 @@ export class MatchComponent implements OnInit {
     this.dragEl = e.target;
     e.dataTransfer.effectAllowed = 'move';
   }
+
   dragOver(e: DragEvent) {
     e.preventDefault();
-    if (!this.dragEl) { return; }
+    if (!this.dragEl) {
+      return;
+    }
     $('.drag-over', this.elementRef.nativeElement).removeClass('drag-over');
     if (this.dragEl === e.target) {
       delete this.dragCurrentHover;
@@ -126,9 +142,12 @@ export class MatchComponent implements OnInit {
     }
     this.dragCurrentHover = $(e.target).closest('.teamB').addClass('drag-over').get(0);
   }
+
   dragEnd(e: DragEvent) {
     e.preventDefault();
-    if (!this.dragEl) { return; }
+    if (!this.dragEl) {
+      return;
+    }
     $('.drag-over', this.elementRef.nativeElement).removeClass('drag-over');
     if (this.dragCurrentHover) {
       const parent = this.dragEl.parentNode;
