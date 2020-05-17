@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {RiotAPIService} from '../riotapi.service';
 import {IChampion, IParticipant} from '../riotapi.types';
 
@@ -15,7 +15,10 @@ export class ChampionComponent implements OnInit {
   champion: IChampion;
   iconUrl: string;
 
-  constructor(private apiService: RiotAPIService) { }
+  @Output() moveUpEvent = new EventEmitter();
+  @Output() moveDownEvent = new EventEmitter();
+
+  constructor(private apiService: RiotAPIService, public elementRef: ElementRef) { }
 
   ngOnInit() {
     this.apiService.getChampion(this.participant.championId).then((champ) => {

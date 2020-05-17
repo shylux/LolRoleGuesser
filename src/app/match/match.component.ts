@@ -1,9 +1,10 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
-import {RiotAPIService,} from '../riotapi.service';
+import {RiotAPIService, } from '../riotapi.service';
 import * as $ from 'jquery';
 import {TIERS, DIVISIONS, IMatch, IParticipant, Positions, ITimeline, getPosition} from '../riotapi.types';
 import {StatsService} from '../stats.service';
 import {PreloaderService} from '../preloader.service';
+import {ChampionComponent} from '../champion/champion.component';
 
 @Component({
   selector: 'app-match',
@@ -12,7 +13,11 @@ import {PreloaderService} from '../preloader.service';
 })
 export class MatchComponent implements OnInit {
 
-  constructor(private elementRef: ElementRef, private apiService: RiotAPIService, private statsService: StatsService, private preloaderService: PreloaderService) {
+  constructor(
+    private elementRef: ElementRef,
+    private apiService: RiotAPIService,
+    private statsService: StatsService,
+    private preloaderService: PreloaderService) {
     statsService.tierChange.subscribe(tier => {
       this.searchMatch();
     });
@@ -156,5 +161,21 @@ export class MatchComponent implements OnInit {
       parent.insertBefore(this.dragCurrentHover, nextNode);
       this.dragEl = undefined;
     }
+  }
+
+  moveUp(champComp: ChampionComponent) {
+    const el = champComp.elementRef.nativeElement;
+    const parent = el.parentNode;
+    const prevNode = el.previousSibling;
+    if (prevNode.classList && prevNode.classList.contains('teamB')) {
+      parent.insertBefore(el, prevNode);
+    }
+  }
+
+  moveDown(champComp: ChampionComponent) {
+    const el = champComp.elementRef.nativeElement;
+    const parent = el.parentNode;
+    const nextNode = el.nextSibling.nextSibling;
+    parent.insertBefore(el, nextNode);
   }
 }

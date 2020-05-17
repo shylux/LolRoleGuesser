@@ -32,4 +32,35 @@
       border-color: $color-team-blue;
     }
   }
+
+  .manual-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    padding: 5px;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 50%;
+    }
+
+    .up img {
+      transform: rotate(180deg);
+    }
+  }
+
+
+  &:last-child .manual-buttons .down {
+    display: none;
+  }
+
+}
+
+@media (min-width: 1281px) {
+  :host .manual-buttons {
+    display: none;
+  }
 }

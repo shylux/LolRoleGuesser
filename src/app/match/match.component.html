@@ -9,7 +9,9 @@
                 draggable="true"
                 (dragstart)="dragStart($event)"
                 (dragover)="dragOver($event)"
-                (dragend)="dragEnd($event)"></app-champion>
+                (dragend)="dragEnd($event)"
+                (moveUpEvent)="moveUp($event)"
+                (moveDownEvent)="moveDown($event)"></app-champion>
 </div>
 <img *ngIf="match && !complete" id="accept" class="submit" (click)="lockIn()" alt="Accept" src=""/>
 <img *ngIf="match && complete" id="play-again" class="submit" (click)="searchMatch()" alt="Play again" src="" />

@@ -53,12 +53,14 @@
   }
 
   .tier-selector {
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    overflow: scroll;
+
     &.toggle {
       display: none;
     }
-
-    display: flex;
-    justify-content: space-between;
   }
 }
 
