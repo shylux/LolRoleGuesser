@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import * as $ from 'jquery';
 import {IChampion, IMatch} from './riotapi.types';
 
+declare let gtag: Function;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -31,6 +33,7 @@ export class RiotAPIService {
 
   async getRandomGame(tier: string, division: string): Promise<IMatch> {
     await this.initialize();
+    gtag('event', 'matchLoad');
     console.log(this.gameVersion);
     const match = await $.getJSON('/match', {tier})
       .fail(() => {
