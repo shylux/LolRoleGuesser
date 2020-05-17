@@ -32,7 +32,10 @@ export class RiotAPIService {
   async getRandomGame(tier: string, division: string): Promise<IMatch> {
     await this.initialize();
     console.log(this.gameVersion);
-    const match = await $.getJSON('/match', {tier});
+    const match = await $.getJSON('/match', {tier})
+      .fail(() => {
+        throw new Error('Error fetching match.');
+      });
     return match as IMatch;
   }
 

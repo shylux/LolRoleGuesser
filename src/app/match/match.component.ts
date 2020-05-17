@@ -37,6 +37,7 @@ export class MatchComponent implements OnInit {
   protected lockedIn = false;
   protected result: boolean;
   public complete = false;
+  public displayErrorMessage = false;
   public teamA: IParticipant[] = [];
   public teamB: IParticipant[] = [];
   public positionsB: Positions[] = [];
@@ -59,7 +60,10 @@ export class MatchComponent implements OnInit {
     delete this.positionsB;
     delete this.teamB;
     delete this.result;
-    this.apiService.getRandomGame(this.statsService.tier, this.selectedDivision).then(this.displayMatch.bind(this));
+    delete this.displayErrorMessage;
+    this.apiService.getRandomGame(this.statsService.tier, this.selectedDivision)
+      .then(this.displayMatch.bind(this))
+      .catch(this.displayError.bind(this));
   }
 
   displayMatch(match: IMatch) {
@@ -80,6 +84,10 @@ export class MatchComponent implements OnInit {
     }
     this.teamA.sort((a, b) => this.roleSorter(a.timeline, b.timeline));
     this.positionsB.sort();
+  }
+
+  displayError() {
+    this.displayErrorMessage = true;
   }
 
   lockIn() {

@@ -49,6 +49,7 @@
     left: 50%;
     transform: translate(-50%, 0);
     margin-top: 5rem;
+    margin-left: -27px;
     width: 54px;
     height: 54px;
 
@@ -67,6 +68,23 @@
   }
   .correct {
     border-right: 12px solid $color-success;
+  }
+}
+
+.loadingError {
+  margin: 1rem;
+  color: $color-team-red;
+
+  div {
+    text-align: center;
+  }
+
+  img {
+    display: block;
+    width: 80px;
+    margin: 0 auto;
+    padding: 1rem;
+    cursor: pointer;
   }
 }
 
