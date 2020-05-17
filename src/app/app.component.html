@@ -3,7 +3,7 @@
     <h1>{{title}}</h1>
     <img class="emblem" (click)="toggleTierSelector()" src="/assets/images/emblems/Emblem_{{statsService.tier}}.png" alt="Tier {{statsService.tier}} Emblem" />
     <div *ngIf="statsService.wins === 0 && statsService.losses === 0" class="hint">
-      <span>Drag the Champions to the correct roles!</span>
+      <span><span class="desktop">Drag</span><span class="mobile">Move</span> the Champions to the correct roles!</span>
       <img alt="Arrow Down" src="/assets/images/arrow.png"/>
     </div>
     <div *ngIf="statsService.wins > 0 || statsService.losses > 0" class="stats">

@@ -64,6 +64,17 @@
   }
 }
 
+@media (min-width: 1281px) {
+  .hint .mobile {
+    display: none;
+  }
+}
+@media (max-width: 1280px) {
+  .hint .desktop {
+    display: none;
+  }
+}
+
 @keyframes bobble {
   from {top: 0;}
   to {top: .5rem;}
