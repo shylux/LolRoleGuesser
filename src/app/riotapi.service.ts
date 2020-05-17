@@ -36,6 +36,7 @@ export class RiotAPIService {
       .fail(() => {
         throw new Error('Error fetching match.');
       });
+    if (match.error) { throw new Error('Error fetching match.'); }
     return match as IMatch;
   }
 

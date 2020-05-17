@@ -4,6 +4,7 @@ import cors = require('cors');
 import helmet = require('helmet');
 import {RiotAPI} from './riotapi';
 import {DIVISIONS, TIERS, TIERS_UPPER} from '../src/app/riotapi.types';
+import {MethodCacheService} from 'ts-method-cache';
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const RIOT_API_KEY: string = process.env.RIOT_API_KEY as string;
 
 const app = express();
 const api = new RiotAPI(RIOT_API_KEY, 'https://euw1.api.riotgames.com');
+const cacheService: MethodCacheService = new MethodCacheService();
 
 app.use(helmet());
 app.use(cors());
@@ -28,6 +30,7 @@ app.get('/match', (req, res) => {
       res.send(match);
     })
     .catch((reason) => {
+      cacheService.clearAllCache();
       res.send({error: reason.constructor.name, message: reason.toString()});
     });
 });

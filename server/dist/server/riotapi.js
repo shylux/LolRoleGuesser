@@ -1,4 +1,13 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,6 +19,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const riotapi_types_1 = require("../src/app/riotapi.types");
+const ts_method_cache_1 = require("ts-method-cache");
 const axios = require('axios').default;
 class RiotAPI {
     constructor(apiKey, domain) {
@@ -68,9 +78,7 @@ class RiotAPI {
             shuffleArray(matchRefs);
             matchRefs = matchRefs.slice(0, 10); // trim to get some newer games
             for (const matchRef of matchRefs) {
-                const url = `${this.domain}/lol/match/v4/matches/${matchRef.gameId}`;
-                // const url = `${this.domain}/lol/match/v4/matches/4336510853`;
-                const match = (yield axios.get(url, this.defaultParams)).data;
+                const match = yield this.getMatch(matchRef.gameId);
                 const positions = [];
                 let hasDuplicate = false;
                 for (const participant of match.participants) {
@@ -94,8 +102,8 @@ class RiotAPI {
     getMatch(matchId) {
         return __awaiter(this, void 0, void 0, function* () {
             const url = `${this.domain}/lol/match/v4/matches/${matchId}`;
-            const match = (yield axios.get(url, this.defaultParams)).data;
-            return match;
+            // const url = `${this.domain}/lol/match/v4/matches/4336510853`;
+            return (yield axios.get(url, this.defaultParams)).data;
         });
     }
     loadGameVersion() {
@@ -105,6 +113,30 @@ class RiotAPI {
         });
     }
 }
+__decorate([
+    ts_method_cache_1.MemoryCache({ ttl: 60 }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:returntype", Promise)
+], RiotAPI.prototype, "getRandomSummonerInSelectedLeague", null);
+__decorate([
+    ts_method_cache_1.MemoryCache({ ttl: 60 * 60 }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], RiotAPI.prototype, "getAccoundIdFromSummonerId", null);
+__decorate([
+    ts_method_cache_1.MemoryCache({ ttl: 60 * 60 }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], RiotAPI.prototype, "getMatchesOfAccountId", null);
+__decorate([
+    ts_method_cache_1.MemoryCache({ ttl: 60 * 60 }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], RiotAPI.prototype, "getMatch", null);
 exports.RiotAPI = RiotAPI;
 /**
  * Randomize array element order in-place.

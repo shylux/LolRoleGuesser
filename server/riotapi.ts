@@ -1,4 +1,5 @@
 import {getPosition, IMatch, IMatchReference} from '../src/app/riotapi.types';
+import {MemoryCache} from 'ts-method-cache';
 
 const axios = require('axios').default;
 
@@ -35,6 +36,7 @@ export class RiotAPI {
     return match as IMatch;
   }
 
+  @MemoryCache({ttl: 60})
   async getRandomSummonerInSelectedLeague(tier: string, division: string, queue = 'RANKED_SOLO_5x5'): Promise<string> {
     const url = `${this.domain}/lol/league/v4/entries/${queue}/${tier}/${division}`;
     const summoners = (await axios.get(url, this.defaultParams)).data;
@@ -42,12 +44,14 @@ export class RiotAPI {
     return summoners[Math.floor(Math.random() * summoners.length)].summonerId;
   }
 
+  @MemoryCache({ttl: 60 * 60})
   async getAccoundIdFromSummonerId(encryptedSummonerId: string): Promise<string> {
     const url = `${this.domain}/lol/summoner/v4/summoners/${encryptedSummonerId}`;
     const account = (await axios.get(url, this.defaultParams)).data;
     return account.accountId;
   }
 
+  @MemoryCache({ttl: 60 * 60})
   async getMatchesOfAccountId(encryptedAccountId: string): Promise<IMatchReference[]> {
     const queue = 420; // ranked 5v5
     const url = `${this.domain}/lol/match/v4/matchlists/by-account/${encryptedAccountId}?queue=${queue}`;
@@ -59,9 +63,7 @@ export class RiotAPI {
     shuffleArray(matchRefs);
     matchRefs = matchRefs.slice(0, 10); // trim to get some newer games
     for (const matchRef of matchRefs) {
-      const url = `${this.domain}/lol/match/v4/matches/${matchRef.gameId}`;
-      // const url = `${this.domain}/lol/match/v4/matches/4336510853`;
-      const match: IMatch = (await axios.get(url, this.defaultParams)).data;
+      const match = await this.getMatch(matchRef.gameId);
 
       const positions = [];
       let hasDuplicate = false;
@@ -81,10 +83,11 @@ export class RiotAPI {
     throw new RetryError('No valid match found.');
   }
 
-  async getMatch(matchId: string): Promise<IMatch> {
+  @MemoryCache({ttl: 60 * 60})
+  async getMatch(matchId: number): Promise<IMatch> {
     const url = `${this.domain}/lol/match/v4/matches/${matchId}`;
-    const match = (await axios.get(url, this.defaultParams)).data;
-    return match as IMatch;
+    // const url = `${this.domain}/lol/match/v4/matches/4336510853`;
+    return (await axios.get(url, this.defaultParams)).data;
   }
 
   async loadGameVersion(): Promise<string> {
