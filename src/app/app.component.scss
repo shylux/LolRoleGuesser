@@ -56,7 +56,6 @@
     display: flex;
     justify-content: space-between;
     max-width: 100%;
-    overflow: scroll;
 
     &.toggle {
       display: none;
@@ -72,6 +71,9 @@
 @media (max-width: 1280px) {
   .hint .desktop {
     display: none;
+  }
+  .container .tier-selector {
+    overflow: scroll;
   }
 }
 
