@@ -22,6 +22,7 @@
     "express": "^4.17.1",
     "helmet": "^3.21.2",
     "mobile-drag-drop": "^2.3.0-rc.2",
+    "ts-method-cache": "^3.3.1",
     "tsc": "^1.20150623.0",
     "typescript": "^3.7.4"
   }
