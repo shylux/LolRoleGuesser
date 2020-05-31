@@ -1,3 +1,5 @@
+@import "variables";
+
 @font-face {
   font-family: "BeaufortLoL";
   src: url("/assets/fonts/Beaufort-Bold.ttf") format("truetype");
@@ -9,8 +11,14 @@
   background-color: #04080f;
 }
 
-body {
-  margin: 0;
+@media (max-width: $mobile-breakpoint) {
+  :root,
+  body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    touch-action: none;
+  }
 }
 
 .container .match app-position + app-champion > .manual-buttons > .up {

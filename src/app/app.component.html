@@ -1,13 +1,18 @@
 <div class="container">
   <header>
-    <h1>{{title}}</h1>
-    <img class="emblem" (click)="toggleTierSelector()" src="/assets/images/emblems/Emblem_{{statsService.tier}}.png" alt="Tier {{statsService.tier}} Emblem" />
+    <h1>{{ title }}</h1>
+    <img class="emblem" (click)="toggleTierSelector()" src="/assets/images/emblems/Emblem_{{statsService.tier}}.png" alt="Tier {{statsService.tier}} Emblem"/>
     <div *ngIf="statsService.wins === 0 && statsService.losses === 0" class="hint">
       <span><span class="desktop">Drag</span><span class="mobile">Move</span> the Champions to the correct roles!</span>
       <img alt="Arrow Down" src="/assets/images/arrow.png"/>
     </div>
     <div *ngIf="statsService.wins > 0 || statsService.losses > 0" class="stats">
-      Wins: <span class="wins">{{statsService.wins}}</span> Losses: <span class="losses">{{statsService.losses}}</span>
+      <span>Wins</span><span class="wins">{{statsService.wins}}</span>
+      <span>Losses</span><span class="losses">{{statsService.losses}}</span>
+      <img *ngIf="statsService.isWinningStreak" class="streak" src="/assets/images/streak-win.png" alt="Streak"/>
+      <img *ngIf="!statsService.isWinningStreak" class="streak" src="/assets/images/streak-lose.png" alt="Streak"/>
+      <span class="{{statsService.isWinningStreak?'wins':'losses'}}">{{statsService.currentStreak}}</span>
+      <span>Best</span><span class="wins">{{statsService.bestWinningStreak}}</span>
     </div>
   </header>
   <div class="tier-selector" *ngIf="tierSelectorToggle">

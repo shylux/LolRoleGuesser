@@ -1,15 +1,7 @@
 <ng-container *ngIf="champion">
   <span class="name">{{champion.name}}</span>
-  <div class="crop">
-    <img [src]="iconUrl" draggable="false" alt="{{champion.name}}" />
-  </div>
-  <div class="manual-buttons">
-    <div class="up" (click)="moveUpEvent.emit(this)">
-      <img  src="/assets/images/arrow.png" alt="Move up"/>
-    </div>
-    <div class="down" (click)="moveDownEvent.emit(this)">
-      <img src="/assets/images/arrow.png" alt="Move down"/>
-    </div>
+  <div class="icon" draggable="false">
+    <img [src]="iconUrl" draggable="false" alt="{{champion.name}}" (load)="onResize($event)"/>
   </div>
 </ng-container>
 <div *ngIf="!champion">loading...</div>

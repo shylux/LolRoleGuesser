@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
 import {CookieService} from 'ngx-cookie-service';
 
@@ -10,6 +10,9 @@ export class StatsService {
 
   public wins = 0;
   public losses = 0;
+  public currentStreak = 0;
+  public isWinningStreak = true; // If the current streak is for wins or losses
+  public bestWinningStreak = 0;
   public tier = 'Gold';
 
   tierChange: Subject<string> = new Subject<string>();
@@ -22,6 +25,9 @@ export class StatsService {
       this.wins = stats.wins;
       this.losses = stats.losses;
       this.tier = stats.tier;
+      this.currentStreak = stats.currentStreak;
+      this.isWinningStreak = stats.isWinningStreak;
+      this.bestWinningStreak = stats.bestWinningStreak;
     } catch (e) {
       console.error('Error while trying to load stats.');
     }
@@ -35,6 +41,9 @@ export class StatsService {
     this.cookieService.set(this.cookieName, JSON.stringify({
       wins: this.wins,
       losses: this.losses,
+      currentStreak: this.currentStreak,
+      isWinningStreak: this.isWinningStreak,
+      bestWinningStreak: this.bestWinningStreak,
       tier: this.tier
     }));
   }
@@ -44,10 +53,27 @@ export class StatsService {
   }
 
   addWin() {
-    this.winsChange.next(this.wins + 1);
+    const wins = this.wins + 1;
+    // Streak
+    if (this.isWinningStreak) {
+      this.currentStreak++;
+      this.bestWinningStreak = Math.max(this.bestWinningStreak, this.currentStreak);
+    } else {
+      this.isWinningStreak = true;
+      this.currentStreak = 1;
+    }
+    this.winsChange.next(wins);
   }
 
   addLoss() {
-    this.lossesChange.next(this.losses + 1);
+    const losses = this.losses + 1;
+    // Streak
+    if (this.isWinningStreak) {
+      this.isWinningStreak = false;
+      this.currentStreak = 1;
+    } else {
+      this.currentStreak++;
+    }
+    this.lossesChange.next(losses);
   }
 }

@@ -12,7 +12,7 @@
 
 .match {
   display: grid;
-  grid-template-columns: [teamA] 3fr [rolesB] 4fr [teamB] 3fr;
+  grid-template-columns: [teamA] 1fr [rolesB] 1fr [teamB] 1fr;
   grid-template-rows: repeat(5, $grid-height);
   grid-auto-flow: column;
   grid-row-gap: 15px;
@@ -20,6 +20,7 @@
   .teamA {
     grid-column: teamA;
   }
+
   .rolesB {
     grid-column: rolesB;
   }
@@ -92,33 +93,44 @@
   cursor: pointer;
   margin: 0 auto 1rem auto;
 
-  &#accept {
+  #accept {
     content: url("/assets/images/accept.png");
+
     &:hover {
       content: url("/assets/images/accept-hover.png");
     }
   }
 
-  &#play-again {
+  #play-again {
     content: url("/assets/images/play-again.png");
+
     &:hover {
       content: url("/assets/images/play-again-hover.png");
     }
   }
 }
 
-@media (max-width: 1280px) {
+@media (max-width: $mobile-breakpoint) {
   .match {
+    height: 90%;
     grid-template-columns: [rolesB] 1fr [teamB] 3fr;
+    grid-template-rows: repeat(5, 17%);
+    grid-row-gap: 3%;
 
     .teamA {
       display: none;
     }
   }
-  .submit img {
-    float: none;
-    margin-left: auto;
-    margin-right: auto;
+  .submit {
+    height: 10%;
+    margin: 0;
+
+    img {
+      display: block;
+      max-height: 90%;
+      margin: 0 auto;
+      padding-bottom: 10%;
+    }
   }
 }
 
