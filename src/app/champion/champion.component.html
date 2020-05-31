@@ -1,6 +1,6 @@
 <ng-container *ngIf="champion">
   <span class="name">{{champion.name}}</span>
-  <div class="icon" draggable="false">
+  <div class="icon">
     <img [src]="iconUrl" draggable="false" alt="{{champion.name}}" (load)="onResize($event)"/>
   </div>
 </ng-container>
