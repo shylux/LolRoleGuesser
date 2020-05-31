@@ -84,6 +84,17 @@
       margin: 0 .5em;
     }
   }
+
+  footer {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    width: 1000px;
+    padding: 1em;
+    height: 2rem;
+    border-top: 1px solid $color-gold;
+  }
 }
 
 @media (min-width: $mobile-breakpoint + 1) {
@@ -136,6 +147,10 @@
 
     .emblem {
       max-height: 80%;
+    }
+
+    footer {
+      display: none;
     }
   }
 }
