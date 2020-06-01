@@ -3,7 +3,7 @@ import express = require('express');
 import cors = require('cors');
 import helmet = require('helmet');
 import {RiotAPI} from './riotapi';
-import {DIVISIONS, TIERS, TIERS_UPPER} from '../src/app/riotapi.types';
+import {DIVISIONS, TIERS} from '../src/app/riotapi.types';
 import {MethodCacheService} from 'ts-method-cache';
 
 dotenv.config();
@@ -25,6 +25,9 @@ app.get('/match', (req, res) => {
   const division = DIVISIONS.indexOf(req.query.division) > -1 ? req.query.division : 'I';
 
   res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   api.getRandomGame(tier, division)
     .then((match) => {
       res.send(match);

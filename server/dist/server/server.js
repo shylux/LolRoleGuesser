@@ -20,6 +20,9 @@ app.get('/match', (req, res) => {
     const tier = riotapi_types_1.TIERS.indexOf(req.query.tier) > -1 ? req.query.tier.toUpperCase() : 'GOLD';
     const division = riotapi_types_1.DIVISIONS.indexOf(req.query.division) > -1 ? req.query.division : 'I';
     res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     api.getRandomGame(tier, division)
         .then((match) => {
         res.send(match);
